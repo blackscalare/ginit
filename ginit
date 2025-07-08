@@ -1,0 +1,102 @@
+#!/bin/bash
+
+WORKING_DIR=$(pwd)
+SELECTED_LANGUAGE=$1
+
+shift  # Shift to process the next arguments
+
+PROJECT_NAME=""
+DIR=""
+LIBRARIES=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -pn|--projectname)
+      PROJECT_NAME="$2"
+      shift 2
+      ;;
+    -d|--dir)
+      DIR="$2"
+      shift 2
+      ;;
+    -l|--libraries)
+      LIBRARIES="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
+
+print () {
+	echo -e $1
+}
+
+copy_makefile() {
+	if [ -n "$LIBRARIES " ]; then
+		print "LIBRARIES=$LIBRARIES"
+		if [ "$LIBRARIES" = "raylib" ]; then
+			cp /etc/ginit/c/Makefile_raylib ./Makefile
+		else
+			cp /etc/ginit/c/Makefile ./Makefile
+		fi
+	fi
+}
+
+handle_c () {
+	copy_makefile
+	mkdir src
+	cp /etc/ginit/c/main.c src/
+	sed -i "s|PROJECT_NAME|$PROJECT_NAME|" Makefile
+}
+
+handle_folder () {
+	f=$1
+
+	if [ -d "$f" ]; then
+		cd "$f"
+	else
+		mkdir -p "$f"
+		cd "$f"
+	fi
+}
+
+if [ -z "$SELECTED_LANGUAGE" ]; then
+	print "Usage:"
+	print "\tginit lang project_name dir libraries"
+	print "\tlang - required"
+	print "\tproject_name - optional; sets the name of the project"
+	print "\tdir - optional; creates a directory where git is initiated and eventual start files appear"
+	print "\tlibraries - optional; creates a Makefile with required information for specified library"
+	print "\nCurrently implemented languages:"
+	print "\tc"
+	print "\nCurrently implemented libraries:"
+	print "\traylib"
+
+	exit 1
+fi
+
+print "This will create an empty git repo in $WORKING_DIR/$DIR. Are you sure? Y/n"
+
+read -r SURE_RESPONSE
+
+if [ "$SURE_RESPONSE" = "n" ] || [ "$SURE_RESPONSE" = "N" ]; then
+	print "Not creating anything, exiting."
+	exit 0
+fi
+
+if [ -n "$DIR" ]; then
+	handle_folder "$DIR"
+fi
+
+if [ -n "$PROJECT_NAME" ]; then
+	handle_folder "$PROJECT_NAME"
+fi
+
+if [ "$SELECTED_LANGUAGE" = "c" ]; then
+	handle_c
+fi
+
+git init
