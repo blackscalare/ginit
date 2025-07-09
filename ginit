@@ -35,6 +35,21 @@ print () {
 	echo -e $1
 }
 
+print_usage() {
+	print "Usage:"
+	print "\tginit lang"
+	print "\tlang - language to init"
+	print "\t-pn --projectname - sets the name of the project"
+	print "\t-d --dir - creates a directory where git is initiated and eventual template files appear"
+	print "\t-l --libraries - creates a buildfile with required information for specified library"
+	print "\nCurrently implemented languages:"
+	print "\tc with make"
+	print "\nCurrently implemented libraries:"
+	print "\traylib"
+
+	exit 1
+}
+
 copy_makefile() {
 	if [ -n "$LIBRARIES " ]; then
 		print "LIBRARIES=$LIBRARIES"
@@ -65,18 +80,7 @@ handle_folder () {
 }
 
 if [ -z "$SELECTED_LANGUAGE" ]; then
-	print "Usage:"
-	print "\tginit lang project_name dir libraries"
-	print "\tlang - required"
-	print "\tproject_name - optional; sets the name of the project"
-	print "\tdir - optional; creates a directory where git is initiated and eventual start files appear"
-	print "\tlibraries - optional; creates a Makefile with required information for specified library"
-	print "\nCurrently implemented languages:"
-	print "\tc"
-	print "\nCurrently implemented libraries:"
-	print "\traylib"
-
-	exit 1
+	print_usage
 fi
 
 print "This will create an empty git repo in $WORKING_DIR/$DIR. Are you sure? Y/n"
