@@ -1,6 +1,7 @@
 #!/bin/bash
 
 WORKING_DIR=$(pwd)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SELECTED_LANGUAGE=$1
 
 shift  # Shift to process the next arguments
@@ -38,9 +39,9 @@ copy_makefile() {
 	if [ -n "$LIBRARIES " ]; then
 		print "LIBRARIES=$LIBRARIES"
 		if [ "$LIBRARIES" = "raylib" ]; then
-			cp /etc/ginit/c/Makefile_raylib ./Makefile
+			cp "$SCRIPT_DIR"/template/c/Makefile_raylib ./Makefile
 		else
-			cp /etc/ginit/c/Makefile ./Makefile
+			cp "$SCRIPT_DIR"/template/c/Makefile ./Makefile
 		fi
 	fi
 }
@@ -48,7 +49,7 @@ copy_makefile() {
 handle_c () {
 	copy_makefile
 	mkdir src
-	cp /etc/ginit/c/main.c src/
+	cp "$SCRIPT_DIR"/template/c/main.c src/
 	sed -i "s|PROJECT_NAME|$PROJECT_NAME|" Makefile
 }
 
