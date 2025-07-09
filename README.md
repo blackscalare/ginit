@@ -20,8 +20,9 @@ ginit is a simple initializer for projects - creates minimum required files to s
 ## C project
 ### Make options
 
-make builds everything in src
-make clean cleans the build folder
+`make` builds everything in src
+
+`make clean` cleans the build folder
 
 ### Folder structure
 ```
