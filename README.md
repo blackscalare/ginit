@@ -2,10 +2,14 @@
 ginit is a simple initializer for projects - creates minimum required files to start and initializes an empty git project for the specified language.
 
 ## Usage
-`ginit lang`
-`-pn --projectname` sets the name of the project
-`-d --dir` creates a directory where git is initiated and eventual template files appear
-`-l --libraries` creates a buildfile with required information for specified library
+
+`ginit lang` 
+
+`-pn --projectname` sets the name of the project 
+
+`-d --dir` creates a directory where git is initiated and eventual template files appear 
+
+`-l --libraries` creates a buildfile with required information for specified library 
 
 ## Currently implemented languages
 * c with make
